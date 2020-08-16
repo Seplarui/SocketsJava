@@ -32,13 +32,13 @@ public class Servidor {
 				System.out.println("Clientes conectados: " + cont);
 				GestorClientes clienteSocket = new GestorClientes(cliente, listaClientes);
 				
-				
+				mIPPuerto = new HashMap();
 				//Guardo los datos del cliente en el arraylist
 				mIPPuerto.put("IP", cliente.getInetAddress());
 				mIPPuerto.put("PUERTO", cliente.getPort());
-				
+				System.out.println("mippuerto: "+mIPPuerto);
 				listaClientes.add(mIPPuerto);
-				System.out.println("Lista clientes conectados: "+listaClientes);
+				System.out.println("Lista clientes conectados Servidor: "+listaClientes);
 				
 				
 				
@@ -60,7 +60,7 @@ public class Servidor {
 
 	private static class GestorClientes implements Runnable {
 		private final Socket clienteSocket;
-		private final ArrayList listaClientes;
+		private ArrayList listaClientes;
 
 		public GestorClientes(Socket socket, ArrayList listaClientes) {
 			this.clienteSocket = socket;
@@ -84,9 +84,9 @@ public class Servidor {
 					
 					//Se envia al cliente de vuelta lo escrito desde el cliente.
 					//Iterar la lista de mensajes
-					for (int i=0; i<listaClientes.size();i++) {
-						System.out.println("lista clientes " + listaClientes.get(i));
-					}
+//					for (int i=0; i<listaClientes.size();i++) {
+//						System.out.println("lista clientes " + listaClientes.get(i));
+//					}
 					out.println(linea);
 				}
 
