@@ -6,6 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class Servidor {
 
@@ -29,7 +30,7 @@ public class Servidor {
 				cont++;
 				System.out.println("Cliente conectado: " + cliente.getInetAddress().getHostAddress() + " Puerto Cliente: "+ cliente.getPort());
 				System.out.println("Clientes conectados: " + cont);
-				GestorClientes clienteSocket = new GestorClientes(cliente);
+				GestorClientes clienteSocket = new GestorClientes(cliente, listaClientes);
 				
 				
 				//Guardo los datos del cliente en el arraylist
@@ -59,9 +60,11 @@ public class Servidor {
 
 	private static class GestorClientes implements Runnable {
 		private final Socket clienteSocket;
+		private final ArrayList listaClientes;
 
-		public GestorClientes(Socket socket) {
+		public GestorClientes(Socket socket, ArrayList listaClientes) {
 			this.clienteSocket = socket;
+			this.listaClientes = listaClientes;
 		}
 
 		@Override
@@ -70,14 +73,20 @@ public class Servidor {
 			BufferedReader in = null;
 			
 			try {
-				
-				
+
+				System.out.println("Socket: "+ clienteSocket);
 				out = new PrintWriter(clienteSocket.getOutputStream(), true);
 				in = new BufferedReader(new InputStreamReader(clienteSocket.getInputStream()));
 				String linea;
 				while ((linea = in.readLine()) != null) {
 					System.out.println("Enviado desde el cliente: " + "Ip: " + clienteSocket.getLocalAddress()
 							+ " Puerto cliente: " + clienteSocket.getPort() + " " + linea);
+					
+					//Se envia al cliente de vuelta lo escrito desde el cliente.
+					//Iterar la lista de mensajes
+					for (int i=0; i<listaClientes.size();i++) {
+						System.out.println("lista clientes " + listaClientes.get(i));
+					}
 					out.println(linea);
 				}
 
